@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'ops_preflight'
+$thor_runner = true
+OpsPreflight::Client.start(ARGV)
