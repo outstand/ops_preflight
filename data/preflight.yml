@@ -1,0 +1,17 @@
+---
+  user: ec2-user
+  domain: preflight.example.com
+  app_name: example
+
+  repository: git@github.com:user/repo.git
+  branch: master
+
+  preflight_bucket: org-preflight
+
+  run_db_migrate: false
+  use_turbo_sprockets: true
+  use_env_file: true
+
+  opsworks:
+    stack_name: Example Stack Name
+    app_name: appname
