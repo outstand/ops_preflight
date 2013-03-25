@@ -1,5 +1,9 @@
 module OpsPreflight
   class Server < Thor
+    include ExitCode
+
+    namespace :default
+
     desc "upload", "Upload preflight files to S3"
     option :bucket, :aliases => '-b', :required => true, :type => :string, :banner => "<S3_BUCKET>"
     option :file, :aliases => '-f', :required => true, :type => :string, :banner => "<FILE>"
@@ -36,9 +40,14 @@ module OpsPreflight
       end
     end
 
-    private
-    def self.exit_on_failure?
-      true
+    desc "deploy", "Deploys the application to opsworks"
+    def deploy
+
+    end
+
+    # Fixes thor's banners when used with :default namespace
+    def self.banner(command, namespace = nil, subcommand = false)
+      "#{basename} #{command.formatted_usage(self, false, subcommand)}"
     end
   end
 end
