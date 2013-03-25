@@ -3,6 +3,7 @@ require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 # require 'mina/rvm'    # for rvm support. (http://rvm.io)
+require 'ops_preflight/tasks'
 
 # Basic settings:
 #   domain       - The hostname to SSH to.
@@ -25,7 +26,7 @@ set :app_uses_env_file, true
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, generate_shared_paths
+set :shared_paths, lambda { generate_shared_paths }
 
 # Optional settings:
 #   set :port, '30000'     # SSH port number.
@@ -43,10 +44,13 @@ task :environment do
   unless settings.rails_env?
     if ENV['RAILS_ENV']
       set :rails_env, ENV['RAILS_ENV']
+    elsif ENV['RACK_ENV']
+      set :rails_env, ENV['RACK_ENV']
     else
       print_error(unindent(%[
         Application environment must be specified.
         Use either deploy:<environment> or deploy RAILS_ENV=<environment>
+        Preflight supports this with `preflight deploy <environment>`
       ]))
       die(2)
     end
@@ -63,34 +67,20 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 
-  if settings.app_users_turbo_sprockets
+  if settings.app_users_turbo_sprockets!
     queue! %[mkdir -p "#{deploy_to}/shared/public/assets"]
     queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public/assets"]
 
     queue! %[touch "#{deploy_to}/shared/public/assets/sources_manifest.yml"]
   end
 
-  if settings.app_uses_env_file
+  if settings.app_uses_env_file!
     queue! %[touch "#{deploy_to}/shared/.env"]
     queue  %[echo "-----> Be sure to edit 'shared/.env'."]
   end
 
   queue! %[touch "#{deploy_to}/shared/config/database.yml"]
   queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
-end
-
-namespace :deploy do
-  desc 'Deploys to production'
-  task :production do
-    set :rails_env, 'production'
-    invoke :deploy
-  end
-
-  desc 'Deploys to staging'
-  task :staging do
-    set :rails_env, 'staging'
-    invoke :deploy
-  end
 end
 
 desc "Deploys the current version to the server."
@@ -103,7 +93,7 @@ task :deploy => :environment do
     invoke :'bundle:install'
     # invoke :'rails:db_migrate'
 
-    if settings.app_users_turbo_sprockets
+    if settings.app_uses_turbo_sprockets!
       invoke :'rails:assets_precompile:force' # Defer to turbo sprockets
     else
       invoke :'rails:assets_precompile'
@@ -112,38 +102,19 @@ task :deploy => :environment do
     to :launch do
       invoke :'preflight:bundle'
       invoke :'preflight:assets'
+      invoke :'preflight:deploy'
     end
-  end
-end
-
-namespace :preflight do
-  desc 'Prepares the bundle for deploy'
-  task :bundle => :environment do
-    queue %[
-      echo "-----> Preflight: Bundle"
-      tar -zcvf preflight-bundle-#{settings.rails_env!}.tgz -C ./vendor/bundle *
-      bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./preflight-bundle-#{settings.rails_env!}.tgz
-    ]
-  end
-
-  desc 'Precompiles assets for deploy'
-  task :assets => :environment do
-    queue %[
-      echo "-----> Preflight: Assets"
-      tar -zcvf preflight-assets-#{settings.rails_env!}.tgz -C ./public assets
-      bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./preflight-assets-#{settings.rails_env!}.tgz
-    ]
   end
 end
 
 def generate_shared_paths
   path = ['config/database.yml', 'log']
 
-  if settings.app_uses_turbo_sprockets
+  if settings.app_uses_turbo_sprockets!
     path << 'public/assets/sources_manifest.yml'
   end
 
-  if settings.app_uses_env_file
+  if settings.app_uses_env_file!
     path << '.env'
   end
 
