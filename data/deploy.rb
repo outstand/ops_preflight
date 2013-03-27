@@ -85,13 +85,7 @@ task :setup => :environment do
     queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public/assets"]
   end
 
-  # if settings.use_env_file!
-  #   queue! %[touch "#{deploy_to}/shared/.env"]
-  #   queue  %[echo "-----> Be sure to edit 'shared/.env'."]
-  # end
-
   queue! %[touch "#{deploy_to}/shared/config/database.yml"]
-  # queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
 
   queue  %[echo "-----> Please add ForwardAgent yes to your ssh config for #{settings.domain!}"]
 end
@@ -122,7 +116,7 @@ task :deploy => :environment do
     to :launch do
       invoke :'preflight:bundle'
       invoke :'preflight:assets'
-      # invoke :'preflight:deploy'
+      invoke :'preflight:deploy'
     end
   end
 end
@@ -133,10 +127,6 @@ def generate_shared_paths
   if settings.use_turbo_sprockets! == 'true'
     path << 'public/assets'
   end
-
-  # if settings.use_env_file!
-  #   path << '.env'
-  # end
 
   path
 end
