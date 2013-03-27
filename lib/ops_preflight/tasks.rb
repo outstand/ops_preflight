@@ -52,7 +52,7 @@ namespace :preflight do
   task :deploy => [:environment, :check_env_vars] do
     queue %[
       echo "-----> Preflight: Deploy"
-      #{echo_cmd %[bundle exec preflight-server deploy '#{settings.opsworks_stack_name!}' '#{settings.opsworks_app_name!}']}
+      #{echo_cmd %[bundle exec preflight-server deploy '#{settings.opsworks_stack_name!}' '#{settings.opsworks_app_name!}' --release="$version"]}
     ]
   end
 end

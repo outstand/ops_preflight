@@ -11,7 +11,7 @@ module OpsPreflight
         @app_name = app_name
       end
 
-      def call
+      def call(release_num = nil)
         instances = instance_ids
         puts "Deploying to #{instances.size} instance#{'s' if instances.size != 1}"
 
@@ -22,7 +22,7 @@ module OpsPreflight
           :command => {
             :name => 'deploy'
           },
-          :comment => 'preflight deployment'
+          :comment => release_num.nil? ? 'Preflight Deployment' : "Preflight Release ##{release_num}"
         })
       end
 

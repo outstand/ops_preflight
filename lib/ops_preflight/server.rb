@@ -23,10 +23,11 @@ module OpsPreflight
     end
 
     desc "deploy <stack_name> <app_name>", "Deploys the application to opsworks"
+    option :release, :type => :string, :banner => '<release number>'
     def deploy(stack_name, app_name)
       require 'ops_preflight/ops_works/deploy.rb'
 
-      OpsWorks::Deploy.new(stack_name, app_name).call
+      OpsWorks::Deploy.new(stack_name, app_name).call(options[:release])
     end
 
     desc "fetch_environment <environment> <stack_name> <app_name>", 'Fetches environment variables from opsworks'
