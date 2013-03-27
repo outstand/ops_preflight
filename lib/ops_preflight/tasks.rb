@@ -25,7 +25,7 @@ namespace :preflight do
   task :bundle => :environment do
     queue %[
       echo "-----> Preflight: Bundle"
-      #{echo_cmd %[tar -zcvf preflight-bundle-#{settings.rails_env!}.tgz -C ./vendor/bundle *]} &&
+      #{echo_cmd %[tar -zcvf preflight-bundle-#{settings.rails_env!}.tgz -C ./vendor bundle]} &&
       #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./preflight-bundle-#{settings.rails_env!}.tgz]}
     ]
   end
