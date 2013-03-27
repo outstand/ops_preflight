@@ -10,7 +10,7 @@ module OpsPreflight
     def upload
       raise Thor::Error, "Specified file not found: #{options[:file]}" unless File.exists?(options[:file])
 
-      require 's3_transfer.rb'
+      require 'ops_preflight/s3_transfer.rb'
       S3Transfer.new(options[:bucket], options[:file]).upload
     end
 
@@ -18,7 +18,7 @@ module OpsPreflight
     option :bucket, :aliases => '-b', :required => true, :type => :string, :banner => "<s3_bucket>"
     option :file, :aliases => '-f', :required => true, :type => :string, :banner => "<file>"
     def download
-      require 's3_transfer.rb'
+      require 'ops_preflight/s3_transfer.rb'
       S3Transfer.new(options[:bucket], options[:file]).upload
     end
 
