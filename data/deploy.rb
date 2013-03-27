@@ -80,7 +80,7 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 
-  if settings.use_turbo_sprockets!
+  if settings.use_turbo_sprockets! == 'true'
     queue! %[mkdir -p "#{deploy_to}/shared/public/assets"]
     queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public/assets"]
 
@@ -107,15 +107,15 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
 
-    if settings.use_env_file!
+    if settings.use_env_file! == 'true'
       invoke :'preflight:fetch_environment'
     end
 
-    if settings.run_db_migrate!
+    if settings.run_db_migrate! == 'true'
       invoke :'rails:db_migrate'
     end
 
-    if settings.use_turbo_sprockets!
+    if settings.use_turbo_sprockets! == 'true'
       invoke :'rails:assets_precompile:force' # Defer to turbo sprockets
     else
       invoke :'rails:assets_precompile'
@@ -132,7 +132,7 @@ end
 def generate_shared_paths
   path = ['config/database.yml', 'log']
 
-  if settings.use_turbo_sprockets!
+  if settings.use_turbo_sprockets! == 'true'
     path << 'public/assets/sources_manifest.yml'
   end
 
