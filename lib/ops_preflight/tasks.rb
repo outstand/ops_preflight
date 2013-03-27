@@ -34,7 +34,7 @@ namespace :preflight do
   task :assets => :environment do
     queue %[
       echo "-----> Preflight: Assets"
-      #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz -C ./public assets]} &&
+      #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz -C #{deploy_to}/#{shared_path}/public assets]} &&
       #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz]}
     ]
   end
