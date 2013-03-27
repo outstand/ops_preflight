@@ -83,8 +83,6 @@ task :setup => :environment do
   if settings.use_turbo_sprockets! == 'true'
     queue! %[mkdir -p "#{deploy_to}/shared/public/assets"]
     queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/public/assets"]
-
-    queue! %[touch "#{deploy_to}/shared/public/assets/sources_manifest.yml"]
   end
 
   # if settings.use_env_file!
@@ -93,7 +91,7 @@ task :setup => :environment do
   # end
 
   queue! %[touch "#{deploy_to}/shared/config/database.yml"]
-  queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
+  # queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
 
   queue  %[echo "-----> Please add ForwardAgent yes to your ssh config for #{settings.domain!}"]
 end
@@ -133,7 +131,7 @@ def generate_shared_paths
   path = ['config/database.yml', 'log']
 
   if settings.use_turbo_sprockets! == 'true'
-    path << 'public/assets/sources_manifest.yml'
+    path << 'public/assets'
   end
 
   # if settings.use_env_file!

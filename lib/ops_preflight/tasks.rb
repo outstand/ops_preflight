@@ -25,8 +25,8 @@ namespace :preflight do
   task :bundle => :environment do
     queue %[
       echo "-----> Preflight: Bundle"
-      #{echo_cmd %[tar -zcvf preflight-bundle-#{settings.rails_env!}.tgz -C ./vendor bundle]} &&
-      #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./preflight-bundle-#{settings.rails_env!}.tgz]}
+      #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-bundle-#{settings.rails_env!}.tgz -C #{deploy_to}/#{shared_path} bundle]} &&
+      #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./tmp/preflight-#{settings.app_name!}-bundle-#{settings.rails_env!}.tgz]}
     ]
   end
 
@@ -34,8 +34,8 @@ namespace :preflight do
   task :assets => :environment do
     queue %[
       echo "-----> Preflight: Assets"
-      #{echo_cmd %[tar -zcvf preflight-assets-#{settings.rails_env!}.tgz -C ./public assets]} &&
-      #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./preflight-assets-#{settings.rails_env!}.tgz]}
+      #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz -C ./public assets]} &&
+      #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz]}
     ]
   end
 
