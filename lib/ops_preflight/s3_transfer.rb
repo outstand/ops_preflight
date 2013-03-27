@@ -32,6 +32,7 @@ module OpsPreflight
 
     protected
     def connection
+      require 'fog'
       Fog::Storage::AWS.new :use_iam_profile => true
     end
 
