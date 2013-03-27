@@ -19,12 +19,12 @@ module OpsPreflight
 
     desc "setup <rails_env>", "Set up the server's preflight environment"
     def setup(rails_env)
-      run "bundle exec mina setup RAILS_ENV=#{rails_env} #{Config.new.client_args} #{mina_args}", :verbose => false
+      run "bundle exec mina setup RAILS_ENV=#{rails_env} #{Config.new.client_args(rails_env)} #{mina_args}", :verbose => false
     end
 
     desc "deploy <rails_env>", "Deploys to the configured app"
     def deploy(rails_env)
-      run "bundle exec mina deploy RAILS_ENV=#{rails_env} #{Config.new.client_args} #{mina_args}", :verbose => false
+      run "bundle exec mina deploy RAILS_ENV=#{rails_env} #{Config.new.client_args(rails_env)} #{mina_args}", :verbose => false
     end
 
     # Fixes thor's banners when used with :default namespace

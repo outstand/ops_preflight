@@ -4,7 +4,6 @@
   app_name: example
 
   repository: git@github.com:user/repo.git
-  branch: master
 
   preflight_bucket: org-preflight
 
@@ -12,6 +11,12 @@
   use_turbo_sprockets: true
   use_env_file: true
 
-  opsworks:
-    stack_name: Example Stack Name
-    app_name: appname
+  opsworks_app_name: appname
+
+  environments:
+    production:
+      branch: master
+      opsworks_stack_name: Production Example
+    staging:
+      branch: staging
+      opsworks_stack_name: Staging Example

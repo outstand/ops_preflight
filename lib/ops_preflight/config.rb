@@ -6,17 +6,17 @@ module OpsPreflight
       config
     end
 
-    def client_args
+    def client_args(rails_env)
       str = ''
       config.each do |var, value|
-        next if var == :opsworks
+        next if var == :environments
 
         str << " #{var.to_s.upcase}='#{value}'"
       end
 
-      if config[:opsworks] && !config[:opsworks].empty?
-        config[:opsworks].each do |var, value|
-          str << " OPSWORKS_#{var.to_s.upcase}='#{value}'"
+      if config[:environments] && config[:environments][rails_env.to_sym]
+        config[:environments][rails_env.to_sym].each do |var, value|
+          str << " #{var.to_s.upcase}='#{value}'"
         end
       end
 
@@ -29,7 +29,11 @@ module OpsPreflight
         new_config = YAML::load(ERB.new(File.read(CONFIG_FILE)).result)
 
         symbolize_keys!(new_config)
-        symbolize_keys!(new_config[:opsworks])
+        symbolize_keys!(new_config[:environments])
+
+        new_config[:environments].each do |env, hash|
+          symbolize_keys!(hash)
+        end
 
         new_config.freeze
       end
