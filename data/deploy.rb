@@ -109,6 +109,7 @@ task :deploy => :environment do
 
     if settings.use_turbo_sprockets! == 'true'
       invoke :'rails:assets_precompile:force' # Defer to turbo sprockets
+      invoke :'preflight:assets_clean_expired'
     else
       invoke :'rails:assets_precompile'
     end
