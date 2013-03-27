@@ -13,7 +13,7 @@ module OpsPreflight
 
       def call(release_num = nil)
         instances = instance_ids
-        puts "Deploying to #{instances.size} instance#{'s' if instances.size != 1}"
+        puts "Deploying #{release_num} to #{instances.size} instance#{'s' if instances.size != 1}"
 
         resp = opsworks.client.create_deployment({
           :stack_id => stack_id,
@@ -22,7 +22,7 @@ module OpsPreflight
           :command => {
             :name => 'deploy'
           },
-          :comment => release_num.nil? ? 'Preflight Deployment' : "Preflight Release ##{release_num}"
+          :comment => release_num.nil? ? 'Preflight Deployment' : "Preflight Release #{release_num}"
         })
       end
 
