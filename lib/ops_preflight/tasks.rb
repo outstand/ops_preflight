@@ -33,7 +33,7 @@ namespace :preflight do
   desc 'Prepares the bundle for deploy'
   task :bundle => :environment do
     queue %[
-      echo "-----> Preflight: Bundle"
+      echo "-----> Preflight: Uploading Bundle"
       #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-bundle-#{settings.rails_env!}.tgz -C #{deploy_to}/#{shared_path} bundle > /dev/null]} &&
       #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./tmp/preflight-#{settings.app_name!}-bundle-#{settings.rails_env!}.tgz]}
     ]
@@ -42,7 +42,7 @@ namespace :preflight do
   desc 'Precompiles assets for deploy'
   task :assets => :environment do
     queue %[
-      echo "-----> Preflight: Assets"
+      echo "-----> Preflight: Uploading Assets"
       #{echo_cmd %[tar -zcvf tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz -C #{deploy_to}/#{shared_path}/public assets > /dev/null]} &&
       #{echo_cmd %[bundle exec preflight-server upload -b #{settings.preflight_bucket!} -f ./tmp/preflight-#{settings.app_name!}-assets-#{settings.rails_env!}.tgz]}
     ]
