@@ -13,7 +13,7 @@ module OpsPreflight
 
       def call(release_num = nil)
         instances = instance_ids
-        puts "Deploying v#{release_num} to #{instances.size} instance#{'s' if instances.size != 1}"
+        puts "Triggering deploy of v#{release_num} to #{instances.size} instance#{'s' if instances.size != 1}"
 
         resp = opsworks.client.create_deployment({
           :stack_id => stack_id,
