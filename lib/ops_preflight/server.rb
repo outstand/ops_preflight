@@ -19,7 +19,7 @@ module OpsPreflight
     option :file, :aliases => '-f', :required => true, :type => :string, :banner => "<file>"
     def download
       require 'ops_preflight/s3_transfer.rb'
-      S3Transfer.new(options[:bucket], options[:file]).upload
+      S3Transfer.new(options[:bucket], options[:file]).download
     end
 
     desc "deploy <stack_name> <app_name>", "Deploys the application to opsworks"
