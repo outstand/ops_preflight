@@ -14,7 +14,7 @@ require 'ops_preflight/tasks'
 set :user, ENV['USER']    # Username in the server to SSH to.
 set :domain, ENV['DOMAIN']
 set :app_name, ENV['APP_NAME']
-set :deploy_to, lambda { "/home/#{settings.user!}/preflight-#{settings.app_name!}-#{settings.rails_env!}" }
+set :deploy_to, lambda { "/home/#{settings.user!}/preflight/#{settings.app_name!}-#{settings.rails_env!}" }
 set :repository, ENV['REPOSITORY']
 set :branch, ENV['BRANCH']
 
