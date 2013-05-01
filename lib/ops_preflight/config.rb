@@ -1,3 +1,5 @@
+require 'yaml'
+
 module OpsPreflight
   class Config
     CONFIG_FILE = 'config/preflight.yml'
