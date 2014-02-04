@@ -20,6 +20,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('thor', '~> 0.17.0')
   gem.add_runtime_dependency('fog', '~> 1.10')
   gem.add_runtime_dependency('mina', '~> 0.3.0')
-  gem.add_runtime_dependency('aws-sdk', '~> 1.8.5')
+  gem.add_runtime_dependency('aws-sdk', '~> 1.33')
   gem.add_runtime_dependency('multi_json', '~> 1.0')
 end
