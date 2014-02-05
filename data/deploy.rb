@@ -108,8 +108,7 @@ task :deploy => :environment do
     end
 
     if settings.use_turbo_sprockets! == 'true'
-      invoke :'rails:assets_precompile:force' # Defer to turbo sprockets
-      invoke :'preflight:assets_clean_expired'
+      invoke :'rails:assets_precompile:force' # Defer to turbo sprockets change tracking instead of mina
     else
       invoke :'rails:assets_precompile'
     end

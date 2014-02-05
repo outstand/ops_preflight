@@ -1,6 +1,5 @@
 set :opsworks_stack_name, ENV['OPSWORKS_STACK_NAME']
 set :opsworks_app_name, ENV['OPSWORKS_APP_NAME']
-set :rake_assets_clean_expired, lambda { "#{rake} assets:clean_expired RAILS_GROUPS=assets" }
 
 namespace :preflight do
   task :check_env_vars do
@@ -20,14 +19,6 @@ namespace :preflight do
       echo "-----> Preflight: Fetch Environment"
       #{echo_cmd %[bundle exec preflight-server fetch_environment #{settings.rails_env!} '#{settings.opsworks_stack_name!}' '#{settings.opsworks_app_name!}']}
     ]
-  end
-
-  desc 'Cleans up expired assets'
-  task :assets_clean_expired do
-    queue %{
-      echo "-----> Preflight: Clean expired assets"
-      #{echo_cmd %[#{rake_assets_clean_expired}]}
-    }
   end
 
   desc 'Prepares the bundle for deploy'
