@@ -1,3 +1,5 @@
+require 'yaml'
+
 module OpsPreflight
   module OpsWorks
     require 'ops_preflight/ops_works/base'
@@ -20,13 +22,8 @@ module OpsPreflight
 
         json = MultiJson.load(resp[:stacks].first[:custom_json])
 
-        str = ''
-        json['env_vars'][app_name][environment].each do |var, value|
-          str << "#{var.upcase}=#{value}\n"
-        end
-
-        File.open(".env.#{environment}", 'wb') do |f|
-          f.write str
+        File.open("config/application.yml", 'wb') do |f|
+          f.write json['env_vars'][app_name].to_yaml
         end
       end
     end
