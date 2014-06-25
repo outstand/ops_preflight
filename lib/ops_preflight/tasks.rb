@@ -41,9 +41,15 @@ namespace :preflight do
 
   desc 'Triggers a deploy'
   task :deploy => [:environment, :check_env_vars] do
-    queue %[
-      echo "-----> Preflight: Deploy"
-      #{echo_cmd %[bundle exec preflight-server deploy '#{settings.opsworks_stack_name!}' '#{settings.opsworks_app_name!}' --release="$version"]}
-    ]
+    if settings.skip_opsworks_deploy
+      queue %[
+        echo "-----> Skipping opsworks deploy"
+      ]
+    else
+      queue %[
+        echo "-----> Preflight: Deploy"
+        #{echo_cmd %[bundle exec preflight-server deploy '#{settings.opsworks_stack_name!}' '#{settings.opsworks_app_name!}' --release="$version"]}
+      ]
+    end
   end
 end
