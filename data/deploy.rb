@@ -26,7 +26,7 @@ set :run_db_migrate, ENV['RUN_DB_MIGRATE']
 set :use_turbo_sprockets, ENV['USE_TURBO_SPROCKETS']
 set :use_env_file, ENV['USE_ENV_FILE']
 
-set :skip_opsworks_deploy, (ENV['SKIP_OPSWORKS_DEPLOY'] || false)
+set :skip_opsworks_deploy, (ENV['SKIP_OPSWORKS_DEPLOY'].nil? ? 'false' : ENV['SKIP_OPSWORKS_DEPLOY'])
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.

@@ -41,7 +41,7 @@ namespace :preflight do
 
   desc 'Triggers a deploy'
   task :deploy => [:environment, :check_env_vars] do
-    if settings.skip_opsworks_deploy
+    if settings.skip_opsworks_deploy == 'true'
       queue %[
         echo "-----> Skipping opsworks deploy"
       ]
