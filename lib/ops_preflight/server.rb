@@ -27,14 +27,14 @@ module OpsPreflight
     def deploy(stack_name, app_name)
       require 'ops_preflight/ops_works/deploy.rb'
 
-      OpsWorks::Deploy.new(stack_name, app_name).call(options[:release])
+      OpsWorks::Deploy.new('us-east-1', stack_name, app_name).call(options[:release])
     end
 
     desc "fetch_environment <environment> <stack_name> <app_name>", 'Fetches environment variables from opsworks'
     def fetch_environment(environment, stack_name, app_name)
       require 'ops_preflight/ops_works/fetch_environment.rb'
 
-      OpsWorks::FetchEnvironment.new(environment, stack_name, app_name).call
+      OpsWorks::FetchEnvironment.new(environment, 'us-east-1', stack_name, app_name).call
     end
 
     # Fixes thor's banners when used with :default namespace

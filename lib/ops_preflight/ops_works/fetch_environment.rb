@@ -8,15 +8,15 @@ module OpsPreflight
       attr_accessor :app_name
       attr_accessor :environment
 
-      def initialize(environment, stack_name, app_name)
-        super stack_name
+      def initialize(environment, region, stack_name, app_name)
+        super region, stack_name
 
         @environment = environment
         @app_name = app_name
       end
 
       def call
-        resp = opsworks.client.describe_stacks(:stack_ids => [stack_id])
+        resp = opsworks.describe_stacks(:stack_ids => [stack_id])
 
         require 'multi_json'
 
