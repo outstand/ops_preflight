@@ -1,5 +1,6 @@
 set :opsworks_stack_name, ENV['OPSWORKS_STACK_NAME']
 set :opsworks_app_name, ENV['OPSWORKS_APP_NAME']
+set :opsworks_stack_autodiscover, ENV['OPSWORKS_STACK_AUTODISCOVER']
 
 namespace :preflight do
   task :check_env_vars do

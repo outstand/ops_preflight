@@ -5,8 +5,8 @@ module OpsPreflight
     namespace :default
 
     desc "upload", "Upload preflight files to S3"
-    option :bucket, :aliases => '-b', :required => true, :type => :string, :banner => "<s3_bucket>"
-    option :file, :aliases => '-f', :required => true, :type => :string, :banner => "<file>"
+    option :bucket, aliases: '-b', required: true, type: :string, banner: "<s3_bucket>"
+    option :file, aliases: '-f', required: true, type: :string, banner: "<file>"
     def upload
       raise Thor::Error, "Specified file not found: #{options[:file]}" unless File.exists?(options[:file])
 
@@ -15,19 +15,21 @@ module OpsPreflight
     end
 
     desc "download", "Downloads preflight files from S3"
-    option :bucket, :aliases => '-b', :required => true, :type => :string, :banner => "<s3_bucket>"
-    option :file, :aliases => '-f', :required => true, :type => :string, :banner => "<file>"
+    option :bucket, aliases: '-b', required: true, type: :string, banner: "<s3_bucket>"
+    option :file, aliases: '-f', required: true, type: :string, banner: "<file>"
     def download
       require 'ops_preflight/s3_transfer.rb'
       S3Transfer.new(options[:bucket], options[:file]).download
     end
 
-    desc "deploy <stack_name> <app_name>", "Deploys the application to opsworks"
-    option :release, :type => :string, :banner => '<release number>'
-    def deploy(stack_name, app_name)
+    desc "deploy <app_name>", "Deploys the application to opsworks"
+    option :stack_discover, type: :string
+    option :stack_name, type: :string
+    option :release, type: :string, banner: '<release number>'
+    def deploy(app_name)
       require 'ops_preflight/ops_works/deploy.rb'
 
-      OpsWorks::Deploy.new(stack_name, app_name).call(options[:release])
+      OpsWorks::Deploy.new(app_name).call(options)
     end
 
     desc "fetch_environment <environment> <stack_name> <app_name>", 'Fetches environment variables from opsworks'

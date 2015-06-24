@@ -23,8 +23,9 @@ module OpsPreflight
     end
 
     desc "deploy <rails_env>", "Deploys to the configured app"
+    method_option :stack_name, :type => :string
     def deploy(rails_env)
-      run "bundle exec mina deploy RAILS_ENV=#{rails_env} #{Config.new.client_args(rails_env)} #{mina_args}", :verbose => false
+      run "bundle exec mina deploy RAILS_ENV=#{rails_env} #{deploy_args(rails_env)} #{mina_args}", :verbose => false
     end
 
     # Fixes thor's banners when used with :default namespace
@@ -33,6 +34,12 @@ module OpsPreflight
     end
 
     no_tasks do
+      def deploy_args(rails_env)
+        args = Config.new.client_args(rails_env)
+        args << "OPSWORKS_STACK_NAME=#{options[:stack_name]}" if options[:stack_name]
+        args
+      end
+
       def mina_args(*args)
         args = "-f #{OpsPreflight.root_path('data', 'deploy.rb')}"
 

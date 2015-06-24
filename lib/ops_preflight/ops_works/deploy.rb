@@ -5,7 +5,7 @@ module OpsPreflight
     class Deploy < Base
       attr_accessor :app_name
 
-      def initialize(stack_name, app_name)
+      def initialize(app_name)
         super stack_name
 
         @app_name = app_name

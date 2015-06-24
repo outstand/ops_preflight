@@ -3,6 +3,7 @@ module OpsPreflight
     class Base
       attr_accessor :stack_name
 
+      # TODO: Add stack discover
       def initialize(stack_name)
         require 'aws-sdk'
 
