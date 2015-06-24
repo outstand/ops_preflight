@@ -5,8 +5,8 @@ module OpsPreflight
     class Deploy < Base
       attr_accessor :app_name
 
-      def initialize(stack_name, app_name)
-        super stack_name
+      def initialize(region, stack_name, app_name)
+        super region, stack_name
 
         @app_name = app_name
       end
@@ -15,7 +15,7 @@ module OpsPreflight
         instances = instance_ids
         puts "Triggering deploy of v#{release_num} to #{instances.size} instance#{'s' if instances.size != 1}"
 
-        resp = opsworks.client.create_deployment({
+        resp = opsworks.create_deployment({
           :stack_id => stack_id,
           :app_id => app_id,
           :instance_ids => instances,
@@ -29,7 +29,7 @@ module OpsPreflight
       protected
       def app_id
         @app_id ||= begin
-          resp = opsworks.client.describe_apps(:stack_id => stack_id)
+          resp = opsworks.describe_apps(:stack_id => stack_id)
           app = resp[:apps].find {|app| app[:name] == app_name}
 
           raise "OpsWorks app not found!" if app.nil?
@@ -39,7 +39,7 @@ module OpsPreflight
       end
 
       def instance_ids
-        resp = opsworks.client.describe_instances(:stack_id => stack_id)
+        resp = opsworks.describe_instances(:stack_id => stack_id)
         ids = []
         resp[:instances].each {|instance| ids << instance[:instance_id] if instance[:status] == 'online' }
 

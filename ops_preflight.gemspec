@@ -17,9 +17,9 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_runtime_dependency('thor', '~> 0.18.1')
+  gem.add_runtime_dependency('thor', '~> 0.19.1')
   gem.add_runtime_dependency('fog', '~> 1.10')
   gem.add_runtime_dependency('mina', '~> 0.3.0')
-  gem.add_runtime_dependency('aws-sdk', '~> 1.33')
+  gem.add_runtime_dependency('aws-sdk', '~> 2')
   gem.add_runtime_dependency('multi_json', '~> 1.0')
 end
