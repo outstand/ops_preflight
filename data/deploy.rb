@@ -124,7 +124,7 @@ task :deploy => :environment do
 end
 
 def generate_shared_paths
-  path = ['config/database.yml', 'log']
+  path = ['log']
 
   if settings.use_turbo_sprockets! == 'true'
     path << 'public/assets'
