@@ -23,8 +23,10 @@ module OpsPreflight
     end
 
     desc "deploy <rails_env>", "Deploys to the configured app"
+    option :ember, type: :boolean, default: false
+    option :ember_only, type: :boolean, default: false
     def deploy(rails_env)
-      run "bundle exec mina deploy RAILS_ENV=#{rails_env} #{Config.new.client_args(rails_env)} #{mina_args}", :verbose => false
+      run "bundle exec mina deploy RAILS_ENV=#{rails_env} DEPLOY_EMBER=#{options[:ember]} EMBER_ONLY=#{options[:ember_only]} #{Config.new.client_args(rails_env)} #{mina_args}", :verbose => false
     end
 
     # Fixes thor's banners when used with :default namespace
